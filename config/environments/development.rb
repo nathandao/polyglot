@@ -34,7 +34,7 @@ Rails.application.configure do
   config.assets.raise_runtime_errors = true
 
   config.neo4j.session_type :server_db
-  config.neo4j.session_path 'http://localhost:7000'
+  config.neo4j.session_path = 'http://localhost:7000'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true

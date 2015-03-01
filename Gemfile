@@ -10,6 +10,7 @@ gem 'jbuilder'     , '~> 2.0'
 gem 'sdoc'         , '~> 0.4.0'  , group: :doc
 gem 'cobweb'       , '~> 1.0.25'
 gem 'neo4j'        , '~> 4.1.0'
+gem 'nokogiri'     , '~> 1.6.6.2'
 
 group :development, :test do
   gem 'byebug'

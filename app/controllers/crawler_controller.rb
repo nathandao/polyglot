@@ -6,7 +6,7 @@ class CrawlerController < ApplicationController
     # TODO: Replace with custom site_url parameter
     url = "http://guynathan.com"
     uri = sanitize_url(url)
-    url = "https://#{uri}"
+    url = "http://#{uri}"
 
     if uri
       if Site.find_by(url: url).blank?

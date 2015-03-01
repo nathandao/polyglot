@@ -10,6 +10,8 @@ class CrawlerController < ApplicationController
 
     if uri
       if Site.find_by(url: url).blank?
+        title = get_site_title(url)
+        Site.create('')
         init_crawl(url)
       else
         # Site already indexed!!!

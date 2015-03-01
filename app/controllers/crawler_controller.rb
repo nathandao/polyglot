@@ -10,18 +10,17 @@ class CrawlerController < ApplicationController
 
     if uri
       if Site.find_by(url: url).blank?
-        title = get_site_title(url)
-        Site.create('')
-        init_crawl(url)
+        title = get_site_name(url)
+        if Site.create(url: url, name: name)
+          init_crawl(url)
+        end
       else
         # Site already indexed!!!
         # TODO: List top words from database
       end
       #puts "Finished Crawl with #{statistics[:page_count]} pages"
-      @words = []
-    else
-      return false
     end
+    @words = Word.all
   end
 
   private
@@ -30,7 +29,8 @@ class CrawlerController < ApplicationController
   # Crawl related function
   def init_crawl(url)
     user_agent = "PolyglotNinja"
-    if Site.find_by(url: url).blank?
+    uri = sanitize_url(url)
+    if Site.find_by(url: uri).blank?
       CobwebCrawler.new(:cache => 600, :valid_mime_types => 'text/*').crawl(url) do |page|
         if page[:mime_type] == 'text/html'
           text = get_plain_text(page)
@@ -44,37 +44,12 @@ class CrawlerController < ApplicationController
   end
 
 
-  # Url related functions
-  def sanitize_url(url)
-    if !get_root_url(url)
-      url = "http://#{url}"
-    end
-    if url = get_root_url(url)
-      return url
-    else
-      return false
-    end
-  end
-
-  def get_root_url(url)
-    if uri = URI.parse(url)
-      uri.userinfo = nil
-      uri.path = ''
-      uri.fragment = nil
-      if !uri.host.nil?
-        return uri.host
-      end
-    end
-    return false
-  end
-
-
   # Header info related functions
-  def get_site_title(url)
+  def get_site_name(url)
     page = Nokogiri::HTML(RestClient.get(url))
-    title = !page.css("title")[0].text
+    name = !page.css("title")[0].text
     if !page.css("title")[0].text.blank?
-      return title
+      return name
     end
     return "Undefined"
   end
@@ -95,12 +70,17 @@ class CrawlerController < ApplicationController
   end
 
   def process_words(words_hash, url)
-    words_hash.each do |word, frequency|
-      word = word.downcase
-      # TODO: Improve word validation logic
-      if Word.find_by(word: word).nil? && word.length > 3 && word.length <= 10
-        Word.create(word: word)
+    if site = Site.find_by(url: url)
+      words_hash.each do |word, frequency|
+        word = word.downcase
+        word_node = Word.find_by(word: word)
+        # TODO: Improve word validation logic
+        if word_node.nil? && word.length > 3 && word.length <= 15
+          word_node = Word.create(word: word)
+        end
       end
     end
   end
+
+
 end

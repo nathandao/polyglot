@@ -32,7 +32,6 @@ class CrawlerController < ApplicationController
       CobwebCrawler.new(:cache => 600, :valid_mime_types => 'text/*').crawl(url) do |page|
         if page[:mime_type] == 'text/html'
           text = get_plain_text(page)
-          puts text
           words_hash = get_word_frequencies(text)
           process_words(words_hash, url)
         end
@@ -95,9 +94,9 @@ class CrawlerController < ApplicationController
 
   def process_words(words_hash, url)
     words_hash.each do |word, frequency|
-      word = word.to_s.downcase
+      word = word.downcase
       # TODO: Improve word validation logic
-      if Word.find(word: word).nil? && word.length > 3 && word.length <= 10
+      if Word.find_by(word: word).nil? && word.length > 3 && word.length <= 10
         Word.create(word: word)
       end
     end

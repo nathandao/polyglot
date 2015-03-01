@@ -4,4 +4,5 @@ class Site
   property :url, type: String
 
   has_many :in, :words, origin: :site
+  #TODO: Add validations
 end

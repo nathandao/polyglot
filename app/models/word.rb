@@ -3,4 +3,5 @@ class Word
   property :word, type: String
 
   has_many :out, :sites, type: :appears_in
+  #TODO: Add validations
 end

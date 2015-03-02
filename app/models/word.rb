@@ -1,5 +1,5 @@
 class Word
-	before_validate :sanitize_word
+	before_validation :sanitize_word
 
   include Neo4j::ActiveNode
   property :word, type: String

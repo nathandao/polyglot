@@ -10,7 +10,7 @@ Todo:
 -------------
 - Validations for Words and Sites model
 - Relationships between Words and Sites
-- Algorithm to identify Words more correctly
+- Better algorithm to identify Words
 - Crawler process queue
 - REST API - only used internally
 - Front end page to handle display and search

@@ -5,9 +5,7 @@ class Site
   property :url, type: String
   property :created, type: DateTime
   property :updated, type: DateTime
-
   has_many :in, :words, rel_class: AppearedIn
-
   index :url
 
   validates_presence_of :url, :name

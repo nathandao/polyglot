@@ -48,11 +48,11 @@ class CrawlerController < ApplicationController
   # Header info related functions
   def get_site_name(url)
     page = Nokogiri::HTML(RestClient.get(url))
-    name = !page.css("title")[0].text
-    if !page.css("title")[0].text.blank?
-      return name
+    name = page.css("title")[0].text
+    if name.blank?
+      name = "Undefined"
     end
-    return "Undefined"
+    return name
   end
 
 
@@ -76,21 +76,18 @@ class CrawlerController < ApplicationController
         word = word.downcase
         word_node = Word.find_by(word: word)
         added = false
-
         if word_node.nil? && word.length > 3 && word.length <= 15
           word_node = Word.create(word: word)
           AppearedIn.create(from_node: word_node, to_node: site_node, frequency: frequency)
         else
           word_node = Word.find_by(word: word)
         end
-
         if !word_node.nil?
-          rel = AppearedIn.where(from_node: word_node, to_node: site_node)
-
-          if !word_node.appared_in.include?(site_node)
+          rel = word_node.query_as(:s).match('s-[rel:`appeared_in`]->(:Site {url: "http://guynathan.com"})').pluck(:rel).first
+          if rel.nil?
             AppearedIn.create(from_node: word_node, to_node: site_node, frequency: frequency)
           else
-            rel.frequency = rel.frequency + frequency
+            rel.add(frequency)
             rel.save
           end
         end

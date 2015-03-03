@@ -5,23 +5,25 @@ class CrawlerController < ApplicationController
 
   def index
     # TODO: Replace with custom site_url parameter
-    url = "guynathan.com"
+    url = "exove.com"
     uri = sanitize_url(url)
     url = "http://#{uri}"
 
     if uri
-      if Site.find_by(url: url).blank?
+      site = Site.find_by(url: url)
+      if site.nil?
         name = get_site_name(url)
-        if Site.create(url: url, name: name)
+        site = Site.create(url: url, name: name)
+        if site
           init_crawl(url)
         end
-      else
-        # Site already indexed!!!
-        # TODO: List top words from database
       end
-      #puts "Finished Crawl with #{statistics[:page_count]} pages"
+      @words = site.query_as(:s).match('w-[rel:`appeared_in`]->s').order_by('rel.frequency DESC').limit(100).pluck('w.word', 'rel.frequency').to_a
+      @site = site
+    else
+      @words = []
+      @site = "Oops, address no valid!"
     end
-    @words = Word.all
   end
 
   private
@@ -83,7 +85,7 @@ class CrawlerController < ApplicationController
           word_node = Word.find_by(word: word)
         end
         if !word_node.nil?
-          rel = word_node.query_as(:s).match('s-[rel:`appeared_in`]->(:Site {url: "http://guynathan.com"})').pluck(:rel).first
+          rel = word_node.query_as(:w).match("w-[rel:`appeared_in`]->(:Site {url: \"#{site_node.url}\"})").pluck(:rel).first
           if rel.nil?
             AppearedIn.create(from_node: word_node, to_node: site_node, frequency: frequency)
           else

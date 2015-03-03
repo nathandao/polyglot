@@ -1,6 +1,17 @@
-<h1>Crawler#index</h1>
+<h1><%= @site.name %></h1>
+<h3><%= @site.url %></h3>
 
+<table>
+<thead>
+  <tr>
+    <th>Words</th>
+    <th>Frequency</th>
+  </tr>
+</thead>
 <% @words.each do |word| %>
-  <p><%= word.word %></p>
+  <tr>
+  <td><%= word[0] %></td>
+  <td><%= word[1] %></td>
+  </tr>
 <% end %>
-<p>Find me in app/views/crawler/index.html.erb</p>
+</table>

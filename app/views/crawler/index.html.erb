@@ -1,17 +1,19 @@
-<h1><%= @site.name %></h1>
-<h3><%= @site.url %></h3>
+<h1><%= @site_name %></h1>
+<h3><%= @site_url %></h3>
 
-<table>
-<thead>
-  <tr>
-    <th>Words</th>
-    <th>Frequency</th>
-  </tr>
-</thead>
-<% @words.each do |word| %>
-  <tr>
-  <td><%= word[0] %></td>
-  <td><%= word[1] %></td>
-  </tr>
+<% if !@words.empty? %>
+  <table>
+  <thead>
+    <tr>
+      <th>Words</th>
+      <th>Frequency</th>
+    </tr>
+  </thead>
+    <% @words.each do |word| %>
+      <tr>
+      <td><%= word[0] %></td>
+      <td><%= word[1] %></td>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
-</table>

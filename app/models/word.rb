@@ -10,6 +10,12 @@ class Word
   validates_uniqueness_of :word, case_sensitive: false
   validate :set_sanitized_word
 
+  def get_site_rel(site)
+    return word_node.query_as(:w).
+           match("w-[rel:`appeared_in`]->(:Site {url: \"#{site.url}\"})").
+           pluck(:rel).first
+  end
+
   protected
 
   def set_sanitized_word

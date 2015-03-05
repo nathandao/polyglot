@@ -1,7 +1,7 @@
 Polyglot
 ===================
 
-Basic web crawler that index all paragraphs of a site and return a list of words used on the site and their numbers of occurrences.
+Basic web crawler that index all paragraphs of a site, return the list of top words used and their numbers of occurrences.
 
 ----------
 

@@ -16,7 +16,7 @@ class CrawlerController < ApplicationController
         if site.nil?
           site = Site.create(url: url, name: name)
           if site
-            init_crawl(url)
+            init_crawl(url, false)
           end
         end
         @words = site.most_used_words(100)
@@ -24,6 +24,31 @@ class CrawlerController < ApplicationController
         @site_url = site.url
       end
     end
+  end
+
+  def queue
+    error = true
+    message = "check if the url is correct"
+    if request.GET[:test]
+      url = request.GET[:url]
+    else
+      url = request.POST[:url]
+    end
+    if !url.blank?
+      url = "http://#{sanitize_url(url)}"
+      if name = get_site_name(url)
+        site = Site.find_by(url: url)
+        if site.nil?
+          site = Site.create(url: url, name: name)
+          if site
+            init_crawl(url)
+            error = false
+            message = "site added to queue"
+          end
+        end
+      end
+    end
+    format.json { render :json => { "message" => message, "url" => url } }
   end
 
 
@@ -66,7 +91,7 @@ class CrawlerController < ApplicationController
 
 
   # Crawl related functions
-  def init_crawl(url)
+  def init_crawl(url, queue)
     user_agent = "PolyglotNinja"
     uri = sanitize_url(url)
     if Site.find_by(url: uri).blank?

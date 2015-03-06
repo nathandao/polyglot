@@ -41,14 +41,15 @@ class CrawlerController < ApplicationController
         if site.nil?
           site = Site.create(url: url, name: name)
           if site
-            init_crawl(url)
+            init_queue(url)
             error = false
             message = "site added to queue"
           end
         end
       end
     end
-    format.json { render :json => { "message" => message, "url" => url } }
+    #format.json { render :json => { "message" => message, "url" => url } }
+    @message = message
   end
 
 
@@ -91,12 +92,15 @@ class CrawlerController < ApplicationController
 
 
   # Crawl related functions
-  def init_crawl(url, queue)
+  def init_crawl(url)
     user_agent = "PolyglotNinja"
     uri = sanitize_url(url)
+    crawler = CobwebCrawler.new(:cache => 600,
+                                :valid_mime_types => 'text/html',
+                                :thread_count => 10)
+
     if Site.find_by(url: uri).blank?
-      CobwebCrawler.new(:cache => 600, :valid_mime_types => 'text/*',
-                        :thread_count => 10).crawl(url) do |page|
+      crawler.crawl(url) do |page|
         if page[:mime_type] == 'text/html'
           text = get_plain_text(page)
           words_hash = get_word_frequencies(text)
@@ -106,6 +110,11 @@ class CrawlerController < ApplicationController
     else
       return false
     end
+  end
+
+  # Crawl related functions
+  def init_queue(url)
+    Resque.enqueue(CrawlerProcess, url)
   end
 
 

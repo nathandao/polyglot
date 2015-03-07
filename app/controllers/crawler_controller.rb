@@ -39,19 +39,15 @@ class CrawlerController < ApplicationController
       if name = get_site_name(url)
         site = Site.find_by(url: url)
         if site.nil?
-          site = Site.create(url: url, name: name)
-          if site
-            init_queue(url)
-            error = false
-            message = "site added to queue"
-          end
+          init_queue(url)
+          error = false
+          message = "site added to queue"
         end
       end
     end
     #format.json { render :json => { "message" => message, "url" => url } }
     @message = message
   end
-
 
   private
 
@@ -114,7 +110,7 @@ class CrawlerController < ApplicationController
 
   # Crawl related functions
   def init_queue(url)
-    Resque.enqueue(CrawlerProcess, url)
+    Resque.enqueue(CrawlerProcessQueue, url)
   end
 
 

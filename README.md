@@ -69,9 +69,9 @@ Start the rails server:
 rails s
 </pre>
 
-POST request to the site with parameter {url: "url of a site"} to
+POST request to the site with parameter {url: "url of a site"} to 'http://localhost:3000/crawl'
 <pre>
-http://localhost:3000/crawl
+curl -H "Content-Type: application/json" -d '{"url":"wired.com"}' http://localhost:3000/crawl
 </pre>
 
 Resque background job can be monitored at:

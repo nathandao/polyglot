@@ -14,9 +14,9 @@ class CrawlerController < ApplicationController
         if site.nil?
           init_queue(url)
           error = false
-          message = "site added to queue"
+          message = "queued"
         else
-          message = "site indexed"
+          message = "indexed"
           indexed = true
           words = site.most_used_words(100)
         end

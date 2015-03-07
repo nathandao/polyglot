@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get 'crawl' => 'crawler#index'
-  get 'queue' => 'crawler#queue'
+ # get 'crawl' => 'crawler#index', :defaults => { :format => 'json' }
+  post 'crawl' => 'crawler#index', :defaults => { :format => 'json' }
   mount Resque::Server, :at => '/resque'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

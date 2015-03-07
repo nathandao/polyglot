@@ -12,6 +12,7 @@ gem 'cobweb'       , '~> 1.0.25'
 gem 'neo4j'        , '~> 4.1.0'
 gem 'nokogiri'     , '~> 1.6.6.2'
 gem 'resque'       , '~> 1.25.2', :require => 'resque/server'
+gem 'responders', '~> 2.0'
 gem 'rest-client'
 
 group :development, :test do

@@ -1,13 +1,15 @@
 class Site
   include Neo4j::ActiveNode
 
-  after_create :add_created_date
+  after_create :set_default_values
 
   property :name, type: String
   property :url, type: String
-  property :pages_indexed, type: Integer
+  property :status, type: String
+  property :indexed_pages, type: Integer
   property :created, type: DateTime
   property :updated, type: DateTime
+
   index :url
 
   has_many :in, :words, rel_class: AppearedIn
@@ -27,10 +29,22 @@ class Site
     return words_map
   end
 
+  def set_status(status)
+    self.status = status
+    self.save
+  end
+
+  def add_indexed_page
+    self.indexed_pages = self.indexed_pages + 1
+    self.save
+  end
 
   private
 
-    def add_created_date
+    def set_default_values
       self.created = Time.now
+      self.status = "pending"
+      self.indexed_pages = 0
+      self.save
     end
 end

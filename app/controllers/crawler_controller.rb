@@ -3,6 +3,8 @@ class CrawlerController < ApplicationController
   respond_to :json
 
   def index
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Request-Method'] = ['POST']
     error = true
     message = "invalid url"
     index = false

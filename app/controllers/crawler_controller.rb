@@ -1,10 +1,9 @@
 class CrawlerController < ApplicationController
-  #TODO: remove response to :html
   respond_to :json
 
   def index
     headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Request-Method'] = ['POST']
+    headers['Access-Control-Request-Method'] = '*'
     error = true
     message = "invalid url"
     index = false

@@ -6,7 +6,6 @@ class CrawlerController < ApplicationController
     headers['Access-Control-Request-Method'] = '*'
     error = true
     message = "invalid url"
-    index = false
     url = request.POST[:url]
     if !url.blank?
       url = "http://#{sanitize_url(url)}"
@@ -30,10 +29,7 @@ class CrawlerController < ApplicationController
 
   private
 
-
   # Url relation functions
-  #
-
   def sanitize_url(url)
     url = url.downcase
     if !get_root_url(url)
@@ -45,7 +41,6 @@ class CrawlerController < ApplicationController
       return false
     end
   end
-
 
   def get_root_url(url)
     if uri = URI.parse(url)
@@ -61,9 +56,16 @@ class CrawlerController < ApplicationController
 
   # Crawl related functions
   def init_queue(url)
-    Resque.enqueue(CrawlerProcessQueue, url)
+    crawler = Cobweb.new(:follow_redirects => true,
+                         :valid_mime_types => ['text/html'],
+                         :direct_call_process_job => true,
+                         :processing_queue => 'PolyglotCrawlProcessJob',
+                         :obey_robots => true,
+                         :crawl_limit_by_page => true,
+                         :redirect_limit => 10)
+    crawler.start(url)
+    #Resque.enqueue(CrawlProcessJob, url)
   end
-
 
   # Header info related functions
   def get_site_name(url)

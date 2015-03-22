@@ -62,7 +62,7 @@ class CrawlerController < ApplicationController
                          :processing_queue => 'PolyglotCrawlProcessJob',
                          :obey_robots => true,
                          :crawl_limit_by_page => true,
-                         :redirect_limit => 10)
+                         :redirect_limit => 2)
     crawler.start(url)
     #Resque.enqueue(CrawlProcessJob, url)
   end

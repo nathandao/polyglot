@@ -24,10 +24,8 @@ class PolyglotCrawlProcessJob
       def get_words(body_content)
         html = Nokogiri::HTML(body_content)
         text = split_words(html)
-        words = Hash[
-          text.group_by(&:downcase).map{ | word, instances |
-            [word,instances.length] }.sort_by(&:last).reverse
-        ]
+        words = text.group_by(&:downcase).map{ | word, instances |
+            {:word => "#{word}", :frequency => instances.length} }
         if words.empty?
           return false
         end

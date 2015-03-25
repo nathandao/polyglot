@@ -29,7 +29,7 @@ class CrawlerController < ApplicationController
 
   private
 
-  # Url relation functions
+
   def sanitize_url(url)
     url = url.downcase
     if !get_root_url(url)
@@ -41,6 +41,7 @@ class CrawlerController < ApplicationController
       return false
     end
   end
+
 
   def get_root_url(url)
     if uri = URI.parse(url)
@@ -54,7 +55,7 @@ class CrawlerController < ApplicationController
     return false
   end
 
-  # Crawl related functions
+
   def init_queue(url)
     crawler = Cobweb.new(:follow_redirects => true,
                          :valid_mime_types => ['text/html'],
@@ -67,7 +68,7 @@ class CrawlerController < ApplicationController
     #Resque.enqueue(CrawlProcessJob, url)
   end
 
-  # Header info related functions
+
   def get_site_name(url)
     if page = Nokogiri::HTML(RestClient.get(url))
       name = page.css("title")[0].text

@@ -13,10 +13,12 @@ class WordProcessJob
     private
 
 
-      def process(words, url)
-        word_data = construct_word_data(words)
+      def process(word_data, url)
+        #word_data = construct_word_data(words)
+        #word_data = [{word: "nathan", frequency: 2}, {word: "nathan2", frequency: 2},{word: "nathan3", frequency: 2},{word: "nathan4", frequency: 2},{word: "nathan5", frequency: 2}]
         cypher = construct_cypher(word_data, url)
-        Neo4j::Session.query(cypher)
+        Neo4j::Session.query(cypher).params(word_data: word_data)
+        #Neo4j::Session.query(cypher, word_data: word_data)
       end
 
 
@@ -39,7 +41,7 @@ class WordProcessJob
 
       def construct_cypher(word_data, url)
         cypher = "match (s:Site { url: '#{url}' })
-          foreach(n IN #{word_data}|
+          foreach(n IN {word_data}|
             merge (w:Word { word: n.word })
             merge (w)-[r:appeared_in]->(s)
             on create set r.frequency = n.frequency

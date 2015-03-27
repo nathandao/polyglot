@@ -34,8 +34,10 @@ class PolyglotCrawlProcessJob
 
 
       def process_words(words, url)
-        data = {:words => words, :url => url}
-        Resque.enqueue(WordProcessJob, data)
+        words.in_groups_of(50, false) {|w|
+          data = {:words => w, :url => url}
+          Resque.enqueue(WordProcessJob, data)
+        }
         #site_node.add_indexed_page
       end
 

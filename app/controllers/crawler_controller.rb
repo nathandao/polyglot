@@ -19,7 +19,7 @@ class CrawlerController < ApplicationController
         else
           message = "indexed"
           error = false
-          words = site.most_used_words(100)
+          words = site.most_used_words(500)
         end
       end
       render json: [ { error: error, message: message, data: words } ]
@@ -63,7 +63,7 @@ class CrawlerController < ApplicationController
                          :processing_queue => 'PolyglotCrawlProcessJob',
                          :obey_robots => true,
                          :crawl_limit_by_page => true,
-                         :redirect_limit => 2)
+                         :redirect_limit => 10)
     crawler.start(url)
     #Resque.enqueue(CrawlProcessJob, url)
   end

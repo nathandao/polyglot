@@ -17,7 +17,7 @@ class WordProcessJob
         #word_data = construct_word_data(words)
         #word_data = [{word: "nathan", frequency: 2}, {word: "nathan2", frequency: 2},{word: "nathan3", frequency: 2},{word: "nathan4", frequency: 2},{word: "nathan5", frequency: 2}]
         cypher = construct_cypher(word_data, url)
-        Neo4j::Session.query(cypher).params(word_data: word_data)
+        Neo4j::Session.query(cypher, word_data: word_data)
         #Neo4j::Session.query(cypher, word_data: word_data)
       end
 
@@ -49,34 +49,6 @@ class WordProcessJob
           )"
         return cypher
       end
-
-# => Old imlementation
-#      def process(words, url)
-#        if site_node = Site.find_by(url: url)
-#          words.each do |word, frequency|
-#            word = word.downcase
-#            word_node = Word.find_by(word: word)
-#            if word_node.nil? && word.length > 0
-#              word_node = Word.create(word: word)
-#              AppearedIn.create(from_node: word_node, to_node: site_node,
-#                                frequency: frequency)
-#            else
-#              word_node = Word.find_by(word: word)
-#            end
-#
-#            if !word_node.nil?
-#              rel = word_node.get_site_rel(site_node)
-#              if rel.nil?
-#                AppearedIn.create(from_node: word_node, to_node: site_node,
-#                                  frequency: frequency)
-#              else
-#                rel.add(frequency)
-#                rel.save
-#              end
-#            end
-#          end
-#        end
-#      end
 
     #end private
   end

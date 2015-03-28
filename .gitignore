@@ -16,4 +16,4 @@
 /db/neo4j/*
 
 # Ignore password setting files
-/app/config/env_auth.yml
+/config/env_auth.yml

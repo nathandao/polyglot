@@ -2,8 +2,6 @@ class CrawlerController < ApplicationController
   respond_to :json
 
   def index
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Request-Method'] = '*'
     error = true
     message = "invalid url"
     url = request.POST[:url]
@@ -65,7 +63,6 @@ class CrawlerController < ApplicationController
                          :crawl_limit_by_page => true,
                          :redirect_limit => 10)
     crawler.start(url)
-    #Resque.enqueue(CrawlProcessJob, url)
   end
 
 

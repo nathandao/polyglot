@@ -11,4 +11,9 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore Neo4J database
 /db/neo4j/*
+
+# Ignore password setting files
+/app/config/env_auth.yml

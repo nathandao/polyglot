@@ -27,12 +27,23 @@ bundle install
 
 Install a preferred Neo4j version:
 <pre>
-rake neo4j:install[community-2.1.6]
+rake neo4j:install[community-2.2.0]
 </pre>
+If you want to use neo4j enterprise version, copy your download version into the db/neo4j/development folder
 
 Change neo4j port to 7000 for development environment:
 <pre>
 rake neo4j:config[development,7000]
+</pre>
+
+Optional: enable authentication for Neo4j:
+<pre>
+rake neo4j:config[development,7000]
+</pre>
+
+If you want to use authentication for Neo4j:
+<pre>
+rake neo4j:enable_auth
 </pre>
 
 Start neo4j

@@ -10,6 +10,8 @@ require "action_view/railtie"
 require "sprockets/railtie"
 require 'neo4j/railtie'
 require "rails/test_unit/railtie"
+require "rubygems"
+require "bing_translator"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.

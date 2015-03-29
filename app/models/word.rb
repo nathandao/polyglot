@@ -18,7 +18,7 @@ class Word
 
   protected
 
-  def set_sanitized_word
-  	self.word = self.word.downcase if self.word
-  end
+    def set_sanitized_word
+    	self.word = self.word.downcase if self.word
+    end
 end

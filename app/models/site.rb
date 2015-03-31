@@ -17,8 +17,8 @@ class Site
   validates_presence_of :url, :name
   validates_uniqueness_of :url, :name, case_sensitive: false
 
+
   def most_used_words(count)
-    processed_words = []
     words = self.query_as(:s).match('w-[rel:`appeared_in`]->s').
                    order_by('rel.frequency DESC').limit(count).
                    pluck('w.word', 'rel.frequency').to_a
@@ -26,20 +26,24 @@ class Site
     words.each do |word|
       words_map << [{ word: word[0], frequency: word[1] }]
     end
-    return words_map
+    words_map
   end
+
 
   def set_status(status)
     self.status = status
     self.save
   end
 
+
   def add_indexed_page
     self.indexed_pages = self.indexed_pages + 1
     self.save
   end
 
-  private
+
+  protected
+
 
     def set_default_values
       self.created = Time.now
@@ -47,4 +51,6 @@ class Site
       self.indexed_pages = 0
       self.save
     end
+
+  # end private
 end

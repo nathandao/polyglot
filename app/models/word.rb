@@ -22,11 +22,14 @@ class Word
     create_translation(self.word, target)
   end
 
+
   protected
+
 
     def set_sanitized_word
     	self.word = self.word.downcase if self.word
     end
+
 
   private
 
@@ -60,5 +63,10 @@ class Word
         return Neo4j::Session.query(cypher)
       end
       false
+    rescue Exception
+      return false
     end
+
+  # End private
+
 end

@@ -1,7 +1,6 @@
 class CrawlerController < ApplicationController
-  require 'rubygems'
-  require 'bing_translator'
   respond_to :json
+
 
   def index
     error = true
@@ -27,40 +26,25 @@ class CrawlerController < ApplicationController
   end
 
 
-  def translate
-    word = request.GET[:word]
-    target_locale = request.GET[:target_locale]
-    translator = BingTranslator.new(ENV['BING_CLIENT_ID'], ENV['BING_CLIENT_SECRET'])
-    locale = translator.detect(word)
-    translated = translator.translate(word, :from => locale, :to => target_locale)
-    render json: [ { word: word, locale: locale, translated: translated,
-                     target_locale: target_locale } ]
-  end
-
   private
+
 
     def sanitize_url(url)
       url = url.downcase
-      if !get_root_url(url)
-        url = "http://#{url}"
-      end
-      if url = get_root_url(url)
-        return url
-      else
-        return false
-      end
+      url = "http://#{url}" if !get_root_url(url)
+      return url if url = get_root_url(url)
+      false
     end
+
 
     def get_root_url(url)
       if uri = URI.parse(url)
         uri.userinfo = nil
         uri.path = ''
         uri.fragment = nil
-        if !uri.host.nil?
-          return uri.host
-        end
+        return uri.host if !uri.host.nil?
       end
-      return false
+      false
     end
 
     def init_queue(url)
@@ -75,15 +59,17 @@ class CrawlerController < ApplicationController
       crawler.start(url)
     end
 
+
     def get_site_name(url)
       if page = Nokogiri::HTML(RestClient.get(url))
         name = page.css("title")[0].text
-        if name.blank?
-          name = "Undefined"
-        end
+        name = "Undefined" if name.blank?
         return name
       end
     rescue Exception
       return false
     end
+
+  # End private
+
 end

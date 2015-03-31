@@ -9,6 +9,7 @@ class WordProcessJob
       process(words, url)
     end
 
+
     private
 
       def process(word_data, url)
@@ -16,33 +17,33 @@ class WordProcessJob
         Neo4j::Session.query(cypher, word_data: word_data)
       end
 
+
       def construct_word_data(words)
         word_data = '['
         first = true
         words.each do | word, frequency |
           word = word.to_s.downcase
-          if first == true
-            first = false
-          else
-            word_data += ','
-          end
+          word_data += ',' if first == false
+          first = false
           word_data += "{word:'#{word}', frequency: #{frequency}}"
         end
         word_data += ']'
         return word_data
       end
 
+
       def construct_cypher(word_data, url)
         cypher = "match (s:Site { url: '#{url}' })
-          foreach(n IN {word_data}|
-            merge (w:Word { word: n.word })
-            merge (w)-[r:appeared_in]->(s)
-            on create set r.frequency = n.frequency
-            on match set r.frequency = r.frequency + n.frequency
-          )"
+                  foreach(n IN {word_data}|
+                    merge (w:Word { word: n.word })
+                    merge (w)-[r:appeared_in]->(s)
+                    on create set r.frequency = n.frequency
+                    on match set r.frequency = r.frequency + n.frequency
+                  )"
         return cypher
       end
 
-    #end private
+    # End private
+
   end
 end

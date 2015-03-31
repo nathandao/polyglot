@@ -26,6 +26,7 @@ class CrawlerController < ApplicationController
     end
   end
 
+
   def translate
     word = request.GET[:word]
     target_locale = request.GET[:target_locale]

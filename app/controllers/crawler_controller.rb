@@ -27,8 +27,8 @@ class CrawlerController < ApplicationController
   end
 
   def translate
-    word = request.POST[:word]
-    target_locale = request.POST[:target_locale]
+    word = request.GET[:word]
+    target_locale = request.GET[:target_locale]
     translator = BingTranslator.new(ENV['BING_CLIENT_ID'], ENV['BING_CLIENT_SECRET'])
     locale = translator.detect(word)
     translated = translator.translate(word, :from => locale, :to => target_locale)
@@ -67,6 +67,7 @@ class CrawlerController < ApplicationController
                            :valid_mime_types => ['text/html'],
                            :direct_call_process_job => true,
                            :processing_queue => 'PolyglotCrawlProcessJob',
+                           :crawl_finished_queue => 'PolyglotCrawlFinishJob',
                            :obey_robots => true,
                            :crawl_limit_by_page => true,
                            :redirect_limit => 10)

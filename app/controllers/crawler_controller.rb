@@ -67,7 +67,7 @@ class CrawlerController < ApplicationController
         return name
       end
     rescue Exception
-      return false
+      false
     end
 
   # End private

@@ -136,7 +136,4 @@ Site already indexed:
 
 Todo:
 -------------
-- Better algorithm to identify Words
-- Http and devise authentication for /resque admin
-- Site's "crawling in process" status
-- Crawl queue status
+- TESTS

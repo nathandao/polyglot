@@ -13,6 +13,7 @@
 /tmp
 
 # Ignore Neo4J database
+/db/neo4j
 /db/neo4j/*
 
 # Ignore password setting files

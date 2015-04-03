@@ -15,6 +15,7 @@ gem 'resque'          , '~> 1.25.2'  , :require => 'resque/server'
 gem 'responders'      , '~> 2.0'
 gem 'rest-client'
 gem 'bing_translator' , '~> 4.4.1'
+gem 'capybara'        , '~> 2.4.4'
 
 gem 'neo4j'      , github: 'neo4jrb/neo4j'      , ref: '34a93a9a2cd40e319b7531eff8cf68e8a069f84d'
 gem 'neo4j-core' , github: 'neo4jrb/neo4j-core' , ref: '5ed2ea999a10ab21c1faf65d0b86bd41dfdbf4ff'

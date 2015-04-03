@@ -26,6 +26,13 @@ class CrawlerController < ApplicationController
   end
 
 
+  def test
+    word = Word.find_by(word: 'hyökkäämään')
+    translation = word.translate('en')
+    render json: [ result: translation ]
+  end
+
+
   private
 
 
@@ -46,6 +53,7 @@ class CrawlerController < ApplicationController
       end
       false
     end
+
 
     def init_queue(url)
       crawler = Cobweb.new(:follow_redirects => true,

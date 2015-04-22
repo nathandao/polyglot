@@ -6,7 +6,6 @@ class Language
 
   has_many :in, :words, rel_class: BelongsTo
   has_many :in, :phrases, rel_class: BelongsTo
-  has_many :in, :sites, rel_class: Uses
 
   validates_presence_of :url, :name
   validates_uniqueness_of :url, :name, case_sensitive: false
